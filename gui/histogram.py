@@ -14,6 +14,18 @@ class Histogram(tk.Toplevel):
         self.canvas.place(x=self.master.width, y=50)
         self.resizable(False, False)
 
+        self.place()
+
     def show(self):
         self.visible = not self.visible
         self.lower() if not self.visible else self.lift()
+
+    def place(self):
+        self.overrideredirect(1)
+        self.lower()
+        self.geometry('{w}x{h}+{x}+{y}'.format(
+            w=self.width,
+            h=self.height,
+            x=500,
+            y=0,
+        ))

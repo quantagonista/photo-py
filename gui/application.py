@@ -17,3 +17,4 @@ class PhotoPy(tk.Tk):
         self.drawing_frame = DrawingFrame(master=self)
         self.histogram = Histogram(master=self)
         self.history_panel = None
+
