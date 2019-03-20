@@ -1,6 +1,4 @@
-import tkinter as tk
+from gui.application import PhotoPy
 
-from gui.application import MainApplication
-
-main = MainApplication(tk.Tk())
+main = PhotoPy()
 main.mainloop()
