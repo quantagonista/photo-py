@@ -11,7 +11,7 @@ class Histogram(tk.Toplevel):
         self.master = kwargs['master']
         self.canvas = tk.Canvas(master=self)
         self.canvas.create_rectangle(0, 0, self.width, self.height, fill='yellow')
-        self.canvas.place(x=self.master.width, y=50)
+        self.canvas.pack()
         self.resizable(False, False)
 
         self.place()
@@ -23,9 +23,11 @@ class Histogram(tk.Toplevel):
     def place(self):
         self.overrideredirect(1)
         self.lower()
+        x = self.master.winfo_x()
+        y = self.master.winfo_y()
         self.geometry('{w}x{h}+{x}+{y}'.format(
             w=self.width,
             h=self.height,
             x=500,
-            y=0,
+            y=500,
         ))

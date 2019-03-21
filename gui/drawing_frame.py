@@ -1,4 +1,10 @@
+import math
+import os
 import tkinter as tk
+from tkinter import filedialog
+
+from PIL import ImageTk, Image
+from pympler import muppy
 
 from gui.histogram import Histogram
 from gui.status_bar import StatusBar
@@ -20,12 +26,13 @@ class DrawingFrame(tk.Frame):
         self.init_toolbar()
         self.init_canvas()
         self.init_status_bar()
+        self.update_status_bar()
 
     def init_menu_bar(self):
         self.menu_bar = tk.Menu(self)
 
         file_menu = tk.Menu(self.menu_bar, tearoff=0)
-        file_menu.add_command(label="Open", command=None)
+        file_menu.add_command(label="Open", command=self.open_file)
         file_menu.add_command(label="Save", command=None)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.master.quit)
@@ -45,10 +52,10 @@ class DrawingFrame(tk.Frame):
 
     def init_canvas(self):
         canvas_width = self.width
-        canvas_height = self.height - 50
+        canvas_height = self.height - 90
         self.canvas = tk.Canvas(self, width=canvas_width, height=canvas_height)
-        self.canvas.create_rectangle(0, 0, self.width, self.height, fill='black')
-        self.canvas.pack()
+        self.canvas.create_rectangle(0, 0, self.width, self.height, fill='#7f7f7f')
+        self.canvas.pack(expand=tk.YES)
 
     def init_toolbar(self):
         self.tool_bar = ToolBar(master=self)
@@ -64,3 +71,44 @@ class DrawingFrame(tk.Frame):
 
     def init_history_panel(self):
         pass
+
+    def open_file(self):
+        path = filedialog.askopenfilename(
+            initialdir='.',
+            defaultextension=".png",
+            title="Open File",
+            filetypes=(
+                ("jpeg files", "*.jpg"),
+                ("png files", "*.png"),
+                ("bmp files", "*.bmp"),
+            )
+        )
+        if path:
+            self.place_image_on_canvas(path)
+
+    def place_image_on_canvas(self, path='adventure-climb-conifer-640781.jpg'):
+        image_file = Image.open(path)
+        image = ImageTk.PhotoImage(image=image_file)
+
+        self.canvas.create_image(0, 0, image=image, anchor=tk.NW)
+
+        self.status_bar.update_status_bar(
+            width=image.width(),
+            height=image.height(),
+            size=self.get_image_size(path),
+            ram=self.get_ram_usage()
+        )
+
+    def get_image_size(self, path):
+        size = os.stat(path).st_size
+        return round(size // 1024)
+
+    def get_ram_usage(self):
+        return muppy.get_size(muppy.get_objects(include_frames=True)) // 1024
+
+    def update_status_bar(self, width=None, height=None):
+        self.status_bar.update_status_bar(
+            width=width,
+            height=height,
+            ram=self.get_ram_usage()
+        )

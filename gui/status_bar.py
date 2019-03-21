@@ -40,13 +40,13 @@ class StatusBar(tk.Frame):
 
     def update_status_bar(self, width=None, height=None, size=None, ram=None):
         if width:
-            self.width_value.set('W: {}'.format(width))
+            self.width_value.set('W: {} px'.format(width))
 
         if height:
-            self.height_value.set('H: {}'.format(height))
+            self.height_value.set('H: {} px'.format(height))
 
         if size:
-            self.image_size_value.set('Size: {}'.format(size))
+            self.image_size_value.set('Size: {} kb'.format(size))
 
         if ram:
-            self.ram_amount_value.set('RAM: {}'.format(ram))
+            self.ram_amount_value.set('RAM: {} kb'.format(ram))
